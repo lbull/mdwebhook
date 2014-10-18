@@ -9,17 +9,17 @@ from dropbox.client import DropboxClient, DropboxOAuth2Flow
 from flask import abort, Flask, redirect, render_template, request, session, url_for
 from markdown import markdown
 import redis
- 
-redis_url = os.environ['REDISTOGO_URL']
+
+redis_url = os.environ['REDISTOGO_URL2']
 redis_client = redis.from_url(redis_url)
- 
+
 # App key and secret from the App console (dropbox.com/developers/apps)
 APP_KEY = os.environ['APP_KEY']
 APP_SECRET = os.environ['APP_SECRET']
- 
+
 app = Flask(__name__)
 app.debug = True
- 
+
 # A random secret used by Flask to encrypt session data cookies
 app.secret_key = os.environ['FLASK_SECRET_KEY']
 
@@ -52,7 +52,7 @@ def oauth_callback():
     '''Callback function for when the user returns from OAuth.'''
 
     access_token, uid, extras = get_flow().finish(request.args)
- 
+
     # Extract and store the access token for this user
     redis_client.hset('tokens', uid, access_token)
 
@@ -103,7 +103,7 @@ def login():
     return redirect(get_flow().start())
 
 @app.route('/done')
-def done(): 
+def done():
     return render_template('done.html')
 
 def validate_request():
